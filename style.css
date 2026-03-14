@@ -1,0 +1,25 @@
+body {
+background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+color:white;
+}
+
+.title{
+text-align:center;
+font-size:50px;
+font-weight:bold;
+color:#ffffff;
+letter-spacing:2px;
+}
+
+.subtitle{
+text-align:center;
+color:#cfd8dc;
+margin-bottom:40px;
+}
+
+.card{
+background:rgba(255,255,255,0.05);
+padding:20px;
+border-radius:12px;
+box-shadow:0px 0px 15px rgba(0,0,0,0.5);
+}

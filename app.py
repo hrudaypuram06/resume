@@ -1,55 +1,52 @@
 import streamlit as st
 from resume_parser import extract_resume_text
 from analyzer import analyze_resume
-from charts import skill_chart
 
-st.set_page_config(page_title="AI Resume Analyzer", layout="wide")
+st.set_page_config(page_title="ProResume Intelligence", layout="wide")
 
-st.title("🚀 AI Resume Analyzer Pro")
+# Load CSS
+def local_css(file):
+    with open(file) as f:
+        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-st.write("Upload your resume and get ATS analysis")
+local_css("style.css")
 
-resume = st.file_uploader("Upload Resume (PDF)", type=["pdf"])
+st.markdown("<h1 class='title'>PRORESUME INTELLIGENCE</h1>", unsafe_allow_html=True)
+st.markdown("<p class='subtitle'>AI Powered Resume Analyzer</p>", unsafe_allow_html=True)
 
-job_description = st.text_area("Paste Job Description (Optional)")
+uploaded_file = st.file_uploader("Upload Resume (PDF)", type=["pdf"])
 
-if resume:
+if uploaded_file:
 
-    text = extract_resume_text(resume)
+    text = extract_resume_text(uploaded_file)
 
-    st.subheader("📄 Resume Text")
-    st.text_area("", text, height=200)
+    result = analyze_resume(text)
 
-    result = analyze_resume(text, job_description)
-
-    col1, col2 = st.columns(2)
+    col1, col2, col3 = st.columns(3)
 
     with col1:
-        st.subheader("🎯 ATS Score")
+        st.markdown("<div class='card'>", unsafe_allow_html=True)
+        st.subheader("ATS Score")
         st.progress(result["score"]/100)
         st.write(result["score"])
+        st.markdown("</div>", unsafe_allow_html=True)
 
     with col2:
-        st.subheader("💼 Recommended Role")
+        st.markdown("<div class='card'>", unsafe_allow_html=True)
+        st.subheader("Detected Skills")
+        st.write(result["skills"])
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    with col3:
+        st.markdown("<div class='card'>", unsafe_allow_html=True)
+        st.subheader("Recommended Role")
         st.write(result["role"])
+        st.markdown("</div>", unsafe_allow_html=True)
 
-    st.subheader("🧠 Skills Found")
-    st.write(result["skills"])
-
-    st.subheader("⚠ Missing Skills")
+    st.subheader("Missing Skills")
     st.write(result["missing"])
 
-    st.subheader("📊 Skill Radar Chart")
-
-    fig = skill_chart(result["skills"])
-    st.plotly_chart(fig)
-
-    if job_description:
-
-        st.subheader("📑 Resume vs Job Description Match")
-        st.write(result["jd_match"], "% match")
-
-    st.subheader("🤖 Resume Suggestions")
+    st.subheader("AI Suggestions")
 
     for s in result["suggestions"]:
         st.write("-", s)

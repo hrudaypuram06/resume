@@ -1,4 +1,5 @@
 streamlit
 pdfminer.six
+plotly
 pandas
 numpy
